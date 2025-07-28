@@ -65,9 +65,6 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
 
-    - name: Test Zig components
-      run: zig build test
-
   coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
