@@ -1,0 +1,101 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - 'frontend/src/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '*.md'
+
+jobs:
+  build-docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install Zig
+      uses: goto-bus-stop/setup-zig@v2
+      with:
+        version: 0.14.1
+
+    - name: Build API docs
+      run: cargo doc --no-deps --all-features
+
+    - name: Install mdBook
+      run: |
+        curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.37/mdbook-v0.4.37-x86_64-unknown-linux-gnu.tar.gz | tar xz
+        chmod +x mdbook
+
+    - name: Build book
+      run: |
+        mkdir -p docs/src
+        if [ ! -f docs/book.toml ]; then
+          cat > docs/book.toml << EOF
+        [book]
+        authors = ["Ferrum Contributors"]
+        language = "en"
+        multilingual = false
+        src = "src"
+        title = "The Ferrum Programming Language"
+        
+        [build]
+        build-dir = "book"
+        
+        [output.html]
+        mathjax-support = true
+        EOF
+        fi
+        
+        if [ ! -f docs/src/SUMMARY.md ]; then
+          cat > docs/src/SUMMARY.md << EOF
+        # Summary
+        
+        - [Introduction](./introduction.md)
+        - [Getting Started](./getting-started.md)
+        - [Language Reference](./language-reference.md)
+        - [Standard Library](./stdlib.md)
+        - [Contributing](./contributing.md)
+        EOF
+        fi
+        
+        if [ ! -f docs/src/introduction.md ]; then
+          cat > docs/src/introduction.md << EOF
+        # Introduction
+        
+        Welcome to Ferrum, a low-level systems programming language that provides explicit control over memory while protecting against common memory safety issues.
+        
+        ## Design Goals
+        
+        - **Memory Safety**: Protect against use-after-free, buffer overflows, and memory leaks
+        - **Performance**: Zero-cost abstractions and minimal runtime overhead
+        - **Explicit Control**: Give developers fine-grained control over memory layout and allocation
+        - **Interoperability**: Easy integration with existing C and system libraries
+        EOF
+        fi
+        
+        ./mdbook build docs
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/book
+        
+    - name: Upload docs artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: |
+          ./docs/book
+          ./target/doc

@@ -1,0 +1,53 @@
+# Configuration for the labeler action
+# https://github.com/actions/labeler
+
+# Frontend changes
+"component: frontend":
+  - frontend/**/*
+  - frontend/src/lexer/**/*
+  - frontend/src/parser/**/*
+  - frontend/src/analyzer/**/*
+  - frontend/src/ir/**/*
+
+# Backend changes  
+"component: backend":
+  - backend/**/*
+  - backend/src/**/*
+
+# Core runtime changes
+"component: core":
+  - core/**/*
+  - core/src/**/*
+
+# Build system changes
+"component: build":
+  - build.zig
+  - "*/build.zig"
+  - Cargo.toml
+  - "*/Cargo.toml"
+  - .github/workflows/**/*
+
+# Documentation changes
+"type: documentation":
+  - "**/*.md"
+  - docs/**/*
+
+# Test changes
+"type: tests":
+  - "*/tests/**/*"
+  - "**/tests.rs"
+  - "**/*test*.rs"
+
+# CI/CD changes
+"type: ci":
+  - .github/**/*
+
+# Examples
+"type: examples":
+  - examples/**/*
+
+# Breaking changes (manual review needed)
+"breaking change":
+  - frontend/src/lexer/**/*
+  - frontend/src/parser/**/*
+  - core/src/**/*

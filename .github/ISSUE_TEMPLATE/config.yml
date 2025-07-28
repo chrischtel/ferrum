@@ -1,0 +1,26 @@
+name: ✨ Choose an issue type
+description: Choose the type of issue you want to create
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to help improve Ferrum! 🦀⚡
+        
+        Please choose the appropriate issue type:
+
+  - type: checkboxes
+    id: issue-type
+    attributes:
+      label: What type of issue is this?
+      options:
+        - label: 🐛 Bug report - Something isn't working
+        - label: ✨ Feature request - New functionality
+        - label: 📖 Documentation - Improve or fix documentation
+        - label: 💭 RFC - Major language design proposal
+        - label: ❓ Question - Get help or clarification
+        - label: 🔧 Build/Infrastructure - CI, build system, tooling
+
+  - type: markdown
+    attributes:
+      value: |
+        After selecting the type above, please close this and create a new issue using the appropriate template.
