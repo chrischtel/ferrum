@@ -31,7 +31,7 @@ pub fn build(b: *std.Build) void {
 
     // Create header file for Rust FFI
     const header_step = b.addWriteFiles();
-    _ = header_step.add("ferrum_backend.h",
+    const header_file = header_step.add("ferrum_backend.h",
         \\#ifndef FERRUM_BACKEND_H
         \\#define FERRUM_BACKEND_H
         \\
@@ -59,5 +59,7 @@ pub fn build(b: *std.Build) void {
         \\#endif // FERRUM_BACKEND_H
     );
 
-    b.getInstallStep().dependOn(&header_step.step);
+    // Install the header file
+    const install_header = b.addInstallFile(header_file, "ferrum_backend.h");
+    b.getInstallStep().dependOn(&install_header.step);
 }

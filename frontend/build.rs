@@ -3,11 +3,16 @@ use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=../build.zig");
+    println!("cargo:rerun-if-changed=../backend/src/main.zig");
+    println!("cargo:rerun-if-changed=../core/src/allocator.zig");
     
     // Get the Zig build output directory
     let out_dir = env::var("OUT_DIR").unwrap();
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     let workspace_dir = PathBuf::from(&manifest_dir).parent().unwrap().to_path_buf();
+    
+    println!("Running Zig build from: {}", workspace_dir.display());
     
     // Build Zig backend first
     let zig_build_status = std::process::Command::new("zig")
