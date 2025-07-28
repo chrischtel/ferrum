@@ -25,7 +25,7 @@ fn main() -> anyhow::Result<()> {
     let input_file = matches.get_one::<String>("input").unwrap();
     let output_file = matches.get_one::<String>("output").unwrap();
 
-    println!("Compiling {} to {}", input_file, output_file);
+    println!("Compiling {input_file} to {output_file}");
 
     // Test backend integration
     unsafe {
@@ -36,15 +36,15 @@ fn main() -> anyhow::Result<()> {
 
         let module_name = CString::new("test_module")?;
         let module = ferrum_create_module(ctx, module_name.as_ptr());
-        
+
         if !module.is_null() {
             let output_path = CString::new(output_file.as_str())?;
             let result = ferrum_compile_to_object(module, output_path.as_ptr());
-            
+
             if result == 0 {
                 println!("Compilation successful!");
             } else {
-                println!("Compilation failed with code: {}", result);
+                println!("Compilation failed with code: {result}");
             }
         }
 

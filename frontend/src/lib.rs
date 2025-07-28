@@ -22,7 +22,10 @@ mod ffi {
     extern "C" {
         pub fn ferrum_create_context() -> *mut Ferrum_Context;
         pub fn ferrum_destroy_context(ctx: *mut Ferrum_Context);
-        pub fn ferrum_create_module(ctx: *mut Ferrum_Context, name: *const i8) -> *mut Ferrum_Module;
+        pub fn ferrum_create_module(
+            ctx: *mut Ferrum_Context,
+            name: *const i8,
+        ) -> *mut Ferrum_Module;
         pub fn ferrum_compile_to_object(module: *mut Ferrum_Module, output_path: *const i8) -> i32;
     }
 }
