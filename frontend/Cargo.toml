@@ -1,0 +1,23 @@
+[package]
+name = "ferrum-frontend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.69"
+
+[lib]
+name = "ferrum_frontend"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ferrum"
+path = "src/main.rs"

@@ -1,0 +1,23 @@
+# Build outputs
+/target/
+/zig-out/
+.zig-cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Generated files
+frontend/src/bindings.rs

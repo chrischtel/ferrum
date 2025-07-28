@@ -6,3 +6,4 @@ Ferrum will be (in the future) a programming language for people who want explic
 - [Rust](https://www.rust-lang.org/) for the frontend.
 - [Zig](https://ziglang.org/) for the backend.
 - [LLVM](https://llvm.org/) for the code generation.
+
