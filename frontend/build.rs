@@ -16,7 +16,7 @@ fn main() {
 
     // Get the target architecture from Cargo
     let target = env::var("TARGET").unwrap_or_else(|_| "native".to_string());
-    println!("Building for target: {}", target);
+    println!("Building for target: {target}");
 
     // Convert Rust target to Zig target format
     let zig_target = match target.as_str() {
@@ -33,13 +33,13 @@ fn main() {
     zig_cmd.arg("build").current_dir(&workspace_dir);
 
     if zig_target != "native" {
-        zig_cmd.arg(format!("-Dtarget={}", zig_target));
+        zig_cmd.arg(format!("-Dtarget={zig_target}"));
     }
 
     let zig_build_status = zig_cmd.status().expect("Failed to execute zig build");
 
     if !zig_build_status.success() {
-        panic!("Zig build failed for target: {}", zig_target);
+        panic!("Zig build failed for target: {zig_target}" );
     }
 
     // Tell cargo where to find the Zig libraries
