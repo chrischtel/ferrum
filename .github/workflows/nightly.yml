@@ -10,9 +10,12 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+
   check-changes:
     name: Check for changes
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     outputs:
       should_build: ${{ steps.check.outputs.should_build }}
       short_sha: ${{ steps.check.outputs.short_sha }}
@@ -35,6 +38,8 @@ jobs:
   build-nightly:
     name: Build Nightly
     needs: check-changes
+    strategy:
+      fail-fast: false
     if: needs.check-changes.outputs.should_build == 'true'
     runs-on: ${{ matrix.os }}
     strategy:

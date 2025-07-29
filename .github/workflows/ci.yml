@@ -59,11 +59,23 @@ jobs:
     - name: Check Zig formatting
       run: zig fmt --check .
 
-    - name: Build
-      run: cargo build --verbose
+    - name: Detect target architecture
+      id: target
+      run: |
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          echo "target=x86_64-unknown-linux-gnu" >> $GITHUB_OUTPUT
+        elif [ "${{ runner.os }}" = "Windows" ]; then
+          echo "target=x86_64-pc-windows-msvc" >> $GITHUB_OUTPUT
+        elif [ "${{ runner.os }}" = "macOS" ]; then
+          echo "target=x86_64-apple-darwin" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
 
-    - name: Run tests
-      run: cargo test --verbose
+    - name: Build with explicit target
+      run: cargo build --verbose --target ${{ steps.target.outputs.target }}
+
+    - name: Run tests with explicit target
+      run: cargo test --verbose --target ${{ steps.target.outputs.target }}
 
   coverage:
     name: Code Coverage

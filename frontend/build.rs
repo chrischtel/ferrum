@@ -14,15 +14,32 @@ fn main() {
 
     println!("Running Zig build from: {}", workspace_dir.display());
 
-    // Build Zig backend first
-    let zig_build_status = std::process::Command::new("zig")
-        .arg("build")
-        .current_dir(&workspace_dir)
-        .status()
-        .expect("Failed to execute zig build");
+    // Get the target architecture from Cargo
+    let target = env::var("TARGET").unwrap_or_else(|_| "native".to_string());
+    println!("Building for target: {}", target);
+
+    // Convert Rust target to Zig target format
+    let zig_target = match target.as_str() {
+        "x86_64-apple-darwin" => "x86_64-macos",
+        "aarch64-apple-darwin" => "aarch64-macos",
+        "x86_64-unknown-linux-gnu" => "x86_64-linux",
+        "aarch64-unknown-linux-gnu" => "aarch64-linux",
+        "x86_64-pc-windows-msvc" => "x86_64-windows",
+        _ => "native", // Fallback to native compilation
+    };
+
+    // Build Zig backend with explicit target
+    let mut zig_cmd = std::process::Command::new("zig");
+    zig_cmd.arg("build").current_dir(&workspace_dir);
+
+    if zig_target != "native" {
+        zig_cmd.arg(format!("-Dtarget={}", zig_target));
+    }
+
+    let zig_build_status = zig_cmd.status().expect("Failed to execute zig build");
 
     if !zig_build_status.success() {
-        panic!("Zig build failed");
+        panic!("Zig build failed for target: {}", zig_target);
     }
 
     // Tell cargo where to find the Zig libraries
