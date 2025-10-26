@@ -11,7 +11,7 @@ thiserror = { workspace = true }
 anyhow = { workspace = true }
 
 [build-dependencies]
-cc = "1.0"
+cc = "1.2"
 bindgen = "0.72"
 
 [lib]
